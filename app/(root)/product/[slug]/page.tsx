@@ -5,6 +5,7 @@ import { getProductBySlug } from "@/lib/actions/product.actions";
 import ProductPrice from "@/components/shared/product/ProductPrice";
 
 import { notFound } from "next/navigation";
+import ProductImages from "@/components/shared/product/ProductImages";
 
 const ProductDetailsPage = async ({
   params,
@@ -22,7 +23,9 @@ const ProductDetailsPage = async ({
       <section>
         <div className="grid grid-cols-1 md:grid-cols-5">
           {/* Images Column */}
-          <div className="col-span-2">{/* Images Component */}</div>
+          <div className="col-span-2">
+            <ProductImages images={product.images} />
+          </div>
           {/* Details Column */}
           <div className="col-span-2 p-5">
             <div className="flex flex-col gap-6">
@@ -31,14 +34,16 @@ const ProductDetailsPage = async ({
               </p>
               <h1 className="h3-bold">{product.name}</h1>
               <p>
-                {product.rating} of ${product.numReviews} reviews
+                {product.rating} of {product.numReviews} reviews
               </p>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center ">
                 <ProductPrice
                   value={Number(product.price)}
                   className="w-24 rounded-full bg-green-100 text-green-700 px-5 py-2"
                 />
-                <Badge>{product.stock} in stock</Badge>
+                <Badge className="w-[70px] p-1.5">
+                  {product.stock} in stock
+                </Badge>
               </div>
             </div>
             <div className="mt-10">
