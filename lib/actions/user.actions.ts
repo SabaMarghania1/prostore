@@ -5,7 +5,7 @@ import { signIn, signOut } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { hashSync } from "bcrypt-ts-edge";
 import { prisma } from "@/db/prisma";
-import { sign } from "crypto";
+import { formatError } from "../utils";
 
 // Sign in the user with credentials
 
@@ -44,12 +44,11 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
       password: formData.get("password"),
       confirmPassword: formData.get("confirmPassword"),
     });
-    console.log(formData);
+
     const plainPassword = user.password;
 
     user.password = hashSync(user.password, 10);
 
-    console.log(plainPassword);
     await prisma.user.create({
       data: {
         name: user.name,
@@ -68,6 +67,6 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
     if (isRedirectError(error)) {
       throw error;
     }
-    return { success: false, message: "User Was not registered" };
+    return { success: false, message: formatError(error) };
   }
 }
